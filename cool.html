@@ -15,13 +15,21 @@
   });
 
   Exercise = React.createClass({
-    render:function(){
+    render: function(){
       return (
+        <div>
+        <div>{this.props.name}</div>
+        <ol>
+        <Set />
+        <Set />
 
+        </ol>
+        </div>
       );
-    };
+    }
   });
-  React.render(<Set />, document.getElementById('content'));
+
+  React.render(<Exercise name="Bench Press" />, document.getElementById('content'));
 
   </script>
 
