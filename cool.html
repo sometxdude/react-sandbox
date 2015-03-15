@@ -47,23 +47,35 @@
   <script type="text/jsx">
 
   Set = React.createClass({
-    render: function(){ return (<div><input type="text" name="weight" value={this.props.weight}/><input type="text" name="reps" value={this.props.reps}/></div> );}
+    render: function(){ return (
+      <div><input type="text" name="weight" value={this.props.weight}/><input type="text" name="reps" value={this.props.reps}/><span onClick={this.props.onDeleteSet}>X</span></div>
+      );}
   });
 
   Exercise = React.createClass({
     getInitialState: function(){
-      return { sets:[{weight:185,reps:5},{weight:205,reps:3 }]};
+      return { sets:[]};
+    },
+    onAddSet:function(e){
+      console.log(e);
+      var newSets = this.state.sets.concat([{weight:null,reps:null}])
+      this.setState({sets:newSets})
+    },
+    onDeleteSet:function(){
+       console.log('set delete clicked');
     },
     render: function(){
       var sets = this.state.sets.map(function(set){
-        return <Set weight={set.weight} reps={set.reps} />
-      });
+        return <Set weight={set.weight} reps={set.reps} onDeleteSet={this.onDeleteSet} />
+      }.bind(this));
       return (
         <div>
         <div>{this.props.name}</div>
         <ol>
         {sets}
         </ol>
+
+        <button onClick={this.onAddSet}> Add</button>
         </div>
       );
     }
