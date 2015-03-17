@@ -48,7 +48,7 @@
 
   Set = React.createClass({
     render: function(){ return (
-      <div><input type="text" name="weight" value={this.props.weight}/><input type="text" name="reps" value={this.props.reps}/><span onClick={this.props.onDeleteSet(this.props.id)}>X</span></div>
+      <div><input type="text" name="weight" value={this.props.weight}/><input type="text" name="reps" value={this.props.reps}/><span onClick={this.props.onDeleteSet.bind(null,this.props.id)}>X</span></div>
       );}
   });
 
