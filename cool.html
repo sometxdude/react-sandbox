@@ -48,7 +48,7 @@
 
   Set = React.createClass({
     render: function(){ return (
-      <div><input type="text" name="weight" value={this.props.weight}/><input type="text" name="reps" value={this.props.reps}/><span onClick={this.props.onDeleteSet}>X</span></div>
+      <div><input type="text" name="weight" value={this.props.weight}/><input type="text" name="reps" value={this.props.reps}/><span onClick={this.props.onDeleteSet(this.props.id)}>X</span></div>
       );}
   });
 
@@ -56,17 +56,34 @@
     getInitialState: function(){
       return { sets:[]};
     },
+    uuid: function () {
+    var i, random;
+    var uuid = '';
+    for (i = 0; i < 32; i++) {
+        random = Math.random() * 16 | 0;
+        if (i === 8 || i === 12 || i === 16 || i === 20) {
+            uuid += '-';
+        }
+
+        uuid += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random)).toString(16);
+    }
+    return uuid;
+},
     onAddSet:function(e){
       console.log(e);
-      var newSets = this.state.sets.concat([{weight:null,reps:null}])
+      var newSets = this.state.sets.concat([{key:this.uuid(),weight:null,reps:null}])
       this.setState({sets:newSets})
     },
-    onDeleteSet:function(){
-       console.log('set delete clicked');
+    handleDeleteSet:function(key){
+        var filterSets = this.state.sets.filter(function(s){
+          return s.key != key;
+        });
+      this.setState({sets:filterSets})
+       console.log('set delete clicked'+key);
     },
     render: function(){
       var sets = this.state.sets.map(function(set){
-        return <Set weight={set.weight} reps={set.reps} onDeleteSet={this.onDeleteSet} />
+        return <Set id={set.key} key={set.key} weight={set.weight} reps={set.reps} onDeleteSet={this.handleDeleteSet} />
       }.bind(this));
       return (
         <div>
