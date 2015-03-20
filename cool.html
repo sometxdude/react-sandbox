@@ -33,28 +33,29 @@
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="container">
-    <div class="row">
-      <div class="one-half column" style="margin-top: 25%">
         <div id="content" />
-
-      </div>
-    </div>
-  </div>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script type="text/jsx">
 
   Set = React.createClass({
-    render: function(){ return (
-      <div><input type="text" name="weight" value={this.props.weight}/><input type="text" name="reps" value={this.props.reps}/><span onClick={this.props.onDeleteSet.bind(null,this.props.id)}>X</span></div>
+    render: function(){
+
+      var deleteButton;
+      if(this.props.editMode)
+      {
+        deleteButton = (<span onClick={this.props.onDeleteSet.bind(null,this.props.id)}>X</span>);
+      }
+
+      return (
+      <div><input readOnly={!this.props.editMode} type="text" name="weight" value={this.props.weight}/><input readOnly={!this.props.editMode} type="text" name="reps" value={this.props.reps}/>{deleteButton}</div>
       );}
   });
 
   Exercise = React.createClass({
     getInitialState: function(){
-      return { sets:[]};
+      return { sets:[],editMode:true};
     },
     uuid: function () {
     var i, random;
@@ -68,9 +69,10 @@
         uuid += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random)).toString(16);
     }
     return uuid;
+},onEditComplete:function(){
+  this.setState({editMode:false});
 },
     onAddSet:function(e){
-      console.log(e);
       var newSets = this.state.sets.concat([{key:this.uuid(),weight:null,reps:null}])
       this.setState({sets:newSets})
     },
@@ -79,20 +81,33 @@
           return s.key != key;
         });
       this.setState({sets:filterSets})
-       console.log('set delete clicked'+key);
     },
     render: function(){
       var sets = this.state.sets.map(function(set){
-        return <Set id={set.key} key={set.key} weight={set.weight} reps={set.reps} onDeleteSet={this.handleDeleteSet} />
+        return <Set editMode={this.state.editMode} id={set.key} key={set.key} weight={set.weight} reps={set.reps} onDeleteSet={this.handleDeleteSet} />
       }.bind(this));
+
+
+      var editModeButtons;
+
+      if(this.state.editMode)
+      {
+          editModeButtons =(
+            <span>
+        <button onClick={this.onAddSet}> Add Set</button>
+        <button className="button button-primary" onClick={this.onEditComplete} > Done</button>
+        </span>
+         );
+      }
+
+
       return (
         <div>
         <div>{this.props.name}</div>
         <ol>
         {sets}
         </ol>
-
-        <button onClick={this.onAddSet}> Add</button>
+        {editModeButtons}
         </div>
       );
     }
