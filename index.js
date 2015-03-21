@@ -1,4 +1,3 @@
-
-console.log('hello world');
+var React = require('react');
 var Exercise = require('./components/Exercise')
 React.render(<Exercise name="Bench Press" />, document.getElementById('content'));
