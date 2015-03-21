@@ -95,4 +95,4 @@ this.setState({editMode:false,sets:sets});
   }
 });
 
-exports Exercise;
+module.exports  = Exercise;
