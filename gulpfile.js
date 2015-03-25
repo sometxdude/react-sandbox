@@ -30,7 +30,7 @@ gulp.task('open', function(){
 // live reload server
 gulp.task('connect', function() {
   connect.server({
-    root: 'app',
+    root: 'build',
     port: port,
     livereload: true
   });
@@ -38,7 +38,7 @@ gulp.task('connect', function() {
 
 // live reload js
 gulp.task('js', function () {
-  gulp.src('./app/dist/**/*.js')
+  gulp.src(DEST+'/**/*.js')
     .pipe(connect.reload());
 });
 
@@ -50,7 +50,7 @@ gulp.task('html', function () {
 
 // watch files for live reload
 gulp.task('watch', function() {
-    gulp.watch('app/dist/js/*.js', ['js']);
+    gulp.watch(DEST+'/js/*.js', ['js']);
     gulp.watch('app/index.html', ['html']);
     gulp.watch('app/src/js/**/*.js', ['browserify']);
 });
@@ -62,9 +62,9 @@ gulp.task('cleanbuild',function(){
 
 gulp.task('build',['browserify','pages','styles','images','assets'])
 
-gulp.task('default', ['browserify','pages','images','assets']);
+gulp.task('default', ['build']);
 
-gulp.task('serve', ['browserify', 'connect', 'open', 'watch']);
+gulp.task('serve', ['build', 'connect', 'open', 'watch']);
 
 gulp.task('clean', function () {
   return gulp.src(DEST, {read: false})
